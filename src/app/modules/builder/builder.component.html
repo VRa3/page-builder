@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="col-xl-5">
+        <app-selection-form></app-selection-form>
+    </div>
+
+    <div class="col-xl-7">
+        <app-navbar
+            [brandText]="'XYZ page'"
+            [elements]="['About', 'Meetups']"
+            [dropdownText]="'More'"
+            [dropdownElements]="['El 1', 'El 2']"
+        ></app-navbar>
+
+        <hr />
+
+        <app-simple-text-section [heading]="'This is heading'" [content]="'A text block with no characters limit.'">
+        </app-simple-text-section>
+    </div>
+</div>
