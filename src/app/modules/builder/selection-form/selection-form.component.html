@@ -2,21 +2,43 @@
     <h4>Choose elements You would like to add to Your page.</h4>
     <h6>Available elements:</h6>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex align-items-center">
-                <input class="form-check-input flex-shrink-0" type="checkbox" value="" id="navbarPreview" />
-                <label class="ms-2 form-check-label" for="navbarPreview">
-                    <img class="img-fluid" src="../../../../assets/components-preview/navbar-preview.png" alt="" />
-                </label>
-            </div>
+    <form [formGroup]="availableComponentsForm">
+        <div class="row">
+            <div class="col-12" formArrayName="components" *ngFor="let component of components.controls; let i = index">
+                <ng-container [formGroupName]="i">
+                    <div class="d-flex align-items-center">
+                        <input
+                            class="form-check-input flex-shrink-0"
+                            type="checkbox"
+                            formControlName="checked"
+                            [id]="component.value.contains.imageURLs.preview"
+                        />
+                        <label class="ms-2 form-check-label" [for]="component.value.contains.imageURLs.preview">
+                            <img
+                                class="img-fluid"
+                                [src]="'../../../../' + component.value.contains.imageURLs.preview"
+                                alt=""
+                            />
+                        </label>
+                    </div>
 
-            <div class="d-flex align-items-center">
-                <input class="form-check-input flex-shrink-0" type="checkbox" value="" id="simpleTextSection" />
-                <label class="ms-2 form-check-label" for="simpleTextSection">
-                    <img class="img-fluid" src="../../../../assets/components-preview/simple-text-section.png" alt="" />
-                </label>
+                    <div *ngIf="component.get('checked').value">
+                        <h2>Inputs placeholder</h2>
+
+                        <div formArrayName="inputs">
+                            <div
+                                [formGroupName]="j"
+                                *ngFor="let item of getInputs(component) | keyvalue; let j = index"
+                            >
+                                {{ getKeyName(item.value.controls) }} -
+                                <input type="text" [formControlName]="getKeyName(item.value.controls)" />
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
             </div>
         </div>
-    </div>
+
+        <button type="button" (click)="onSend()">Control values</button>
+    </form>
 </div>
