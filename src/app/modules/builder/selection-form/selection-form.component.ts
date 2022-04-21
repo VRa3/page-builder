@@ -1,13 +1,15 @@
 import { availablePremadeComponents } from "./available-premade-components";
-import { Component, OnInit, ɵɵsetComponentScope } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormArray, FormBuilder } from "@angular/forms";
+import { Subscription } from "rxjs";
+import { BuilderService } from "../builder.service";
 
 @Component({
     selector: "app-selection-form",
     templateUrl: "./selection-form.component.html",
     styleUrls: ["./selection-form.component.scss"],
 })
-export class SelectionFormComponent implements OnInit {
+export class SelectionFormComponent implements OnInit, OnDestroy {
     availableComponentsForm = this.fb.group({
         components: this.fb.array([]),
     });
@@ -16,7 +18,9 @@ export class SelectionFormComponent implements OnInit {
         return this.availableComponentsForm.get("components") as FormArray;
     }
 
-    constructor(private fb: FormBuilder) {}
+    private availableComponentsFormSub: Subscription;
+
+    constructor(private fb: FormBuilder, private builderService: BuilderService) {}
 
     ngOnInit(): void {
         availablePremadeComponents.forEach((component) => {
@@ -38,6 +42,14 @@ export class SelectionFormComponent implements OnInit {
 
             this.components.push(this.fb.group(obj));
         });
+
+        this.availableComponentsFormSub = this.availableComponentsForm.valueChanges.subscribe((form) => {
+            this.builderService.updateSelectionForm(form);
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.availableComponentsFormSub.unsubscribe();
     }
 
     onSend() {
