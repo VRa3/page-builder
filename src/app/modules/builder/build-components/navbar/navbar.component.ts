@@ -1,18 +1,13 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, ViewEncapsulation } from "@angular/core";
 
 @Component({
     selector: "app-navbar",
     templateUrl: "./navbar.component.html",
+    encapsulation: ViewEncapsulation.None,
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
     @Input() brandText: string;
     @Input() elements: string[];
     @Input() dropdownText: string;
     @Input() dropdownElements: string[];
-
-    dropdownOpened = false;
-
-    constructor() {}
-
-    ngOnInit(): void {}
 }

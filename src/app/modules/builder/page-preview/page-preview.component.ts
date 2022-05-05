@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, ViewChild, ViewContainerRef } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, ViewChild, ViewContainerRef, ViewEncapsulation } from "@angular/core";
 import { BuilderService } from "../builder.service";
 import { Subscription } from "rxjs";
 import { ComponentsFactory } from "./components-factory.class";
@@ -7,6 +7,7 @@ import { ComponentsFactory } from "./components-factory.class";
     selector: "app-page-preview",
     templateUrl: "./page-preview.component.html",
     styleUrls: ["./page-preview.component.scss"],
+    encapsulation: ViewEncapsulation.None,
 })
 export class PagePreviewComponent implements AfterViewInit, OnDestroy {
     @ViewChild("componentsContainer", { read: ViewContainerRef }) componentsContainer: ViewContainerRef;
@@ -21,7 +22,6 @@ export class PagePreviewComponent implements AfterViewInit, OnDestroy {
 
             components.forEach((component) => {
                 if (component.checked) {
-                    console.log(component);
                     const x = ComponentsFactory.create(component.contains.componentName);
 
                     //@ts-ignore

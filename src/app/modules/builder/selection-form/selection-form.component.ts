@@ -67,4 +67,16 @@ export class SelectionFormComponent implements OnInit, OnDestroy {
     log(x) {
         console.log(x);
     }
+
+    onGenerateHTML() {
+        const a = document.querySelector("app-page-preview");
+        const b = a.innerHTML;
+
+        /*
+        '<!--container-->'
+        '<!--bindings={}--><!--bindings={}-->'
+        */
+
+        console.log(b.replace(/<!--(?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->)(.|\n))*-->/g, ""));
+    }
 }
