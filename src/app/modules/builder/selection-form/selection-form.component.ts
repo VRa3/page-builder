@@ -77,6 +77,17 @@ export class SelectionFormComponent implements OnInit, OnDestroy {
         '<!--bindings={}--><!--bindings={}-->'
         */
 
-        console.log(b.replace(/<!--(?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->)(.|\n))*-->/g, ""));
+        const cleanHTML = b.replace(/<!--(?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->)(.|\n))*-->/g, "");
+
+        var element = document.createElement("a");
+        element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(cleanHTML));
+        element.setAttribute("download", "hey.html");
+
+        element.style.display = "none";
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
     }
 }
