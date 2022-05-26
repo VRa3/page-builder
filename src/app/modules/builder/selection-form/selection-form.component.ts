@@ -1,6 +1,6 @@
-import { availablePremadeComponents } from "./available-premade-components";
+import { availablePremadeComponents, PremadeComponent } from "./available-premade-components";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormArray, FormBuilder } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { BuilderService } from "../builder.service";
 
@@ -24,23 +24,7 @@ export class SelectionFormComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         availablePremadeComponents.forEach((component) => {
-            const obj = {
-                contains: component,
-                checked: false,
-                inputs: this.fb.array([]),
-            };
-
-            for (let input of component.inputs) {
-                const key = this.getKeyName(input);
-                const value = input[key];
-
-                /**
-                 * Watch out - the `value` here might be an array of string, but will be converted to string. Must be fixed
-                 */
-                obj.inputs.push(this.fb.group({ [key]: value }));
-            }
-
-            this.components.push(this.fb.group(obj));
+            this.components.push(this.createFormGroupForPremadeComponent(component, false));
         });
 
         this.availableComponentsFormSub = this.availableComponentsForm.valueChanges.subscribe((form) => {
@@ -89,5 +73,38 @@ export class SelectionFormComponent implements OnInit, OnDestroy {
         element.click();
 
         document.body.removeChild(element);
+    }
+
+    duplicate(component: FormGroup) {
+        const premadeComponentToAdd = availablePremadeComponents.find(
+            (el) => el.componentName === component.value.contains.componentName
+        );
+
+        this.components.push(this.createFormGroupForPremadeComponent(premadeComponentToAdd, true));
+    }
+
+    delete(i: number) {
+        this.components.removeAt(i);
+    }
+
+    private createFormGroupForPremadeComponent(component: PremadeComponent, isDeletable: boolean): FormGroup {
+        const obj = {
+            contains: component,
+            checked: false,
+            inputs: this.fb.array([]),
+            isDeletable,
+        };
+
+        for (let input of component.inputs) {
+            const key = this.getKeyName(input);
+            const value = input[key];
+
+            /**
+             * Watch out - the `value` here might be an array of string, but will be converted to string. Must be fixed
+             */
+            obj.inputs.push(this.fb.group({ [key]: value }));
+        }
+
+        return this.fb.group(obj);
     }
 }

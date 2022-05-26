@@ -1,4 +1,4 @@
-interface PremadeComponent {
+export interface PremadeComponent {
     name: string;
     componentName: string;
     inputs: { [key: string]: "" | ""[] }[];

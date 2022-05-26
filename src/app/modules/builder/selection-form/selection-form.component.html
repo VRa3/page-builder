@@ -7,13 +7,19 @@
             <div class="col-12" formArrayName="components" *ngFor="let component of components.controls; let i = index">
                 <ng-container [formGroupName]="i">
                     <div class="d-flex align-items-center">
+                        <button *ngIf="component.value.isDeletable" class="btn btn-danger me-2" (click)="delete(i)">
+                            Delete
+                        </button>
                         <input
                             class="form-check-input flex-shrink-0"
                             type="checkbox"
                             formControlName="checked"
-                            [id]="component.value.contains.imageURLs.preview"
+                            [id]="component.value.contains.imageURLs.preview + '-' + i"
                         />
-                        <label class="ms-2 form-check-label" [for]="component.value.contains.imageURLs.preview">
+                        <label
+                            class="ms-2 form-check-label"
+                            [for]="component.value.contains.imageURLs.preview + '-' + i"
+                        >
                             <img
                                 class="img-fluid"
                                 [src]="'../../../../' + component.value.contains.imageURLs.preview"
@@ -34,6 +40,8 @@
                                 <input type="text" [formControlName]="getKeyName(item.value.controls)" />
                             </div>
                         </div>
+
+                        <button class="btn btn-primary" (click)="duplicate(component)">duplicate</button>
                     </div>
                 </ng-container>
             </div>

@@ -18,6 +18,8 @@ export class PagePreviewComponent implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit(): void {
         this.builderService.selectionForm$.subscribe(({ components }: any) => {
+            console.log(components);
+
             this.componentsContainer.clear();
 
             components.forEach((component) => {
