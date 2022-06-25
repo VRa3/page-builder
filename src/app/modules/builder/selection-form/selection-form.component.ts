@@ -24,7 +24,7 @@ export class SelectionFormComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         availablePremadeComponents.forEach((component, i) => {
-            this.components.push(this.createFormGroupForPremadeComponent(component, false, i));
+            this.components.push(this.createFormGroupForPremadeComponent(component, true, i));
         });
 
         this.availableComponentsFormSub = this.availableComponentsForm.valueChanges.subscribe((form) => {
@@ -81,7 +81,7 @@ export class SelectionFormComponent implements OnInit, OnDestroy {
         );
 
         this.components.push(
-            this.createFormGroupForPremadeComponent(premadeComponentToAdd, true, this.components.controls.length)
+            this.createFormGroupForPremadeComponent(premadeComponentToAdd, false, this.components.controls.length)
         );
     }
 
@@ -113,16 +113,12 @@ export class SelectionFormComponent implements OnInit, OnDestroy {
         this.components.insert(i + 1, x);
     }
 
-    private createFormGroupForPremadeComponent(
-        component: PremadeComponent,
-        isDeletable: boolean,
-        i: number
-    ): FormGroup {
+    private createFormGroupForPremadeComponent(component: PremadeComponent, isPristine: boolean, i: number): FormGroup {
         const obj = {
             contains: component,
             checked: false,
             inputs: this.fb.array([]),
-            isDeletable,
+            isPristine,
             index: i,
         };
 

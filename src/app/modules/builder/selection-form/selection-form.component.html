@@ -7,7 +7,7 @@
             <div class="col-12" formArrayName="components" *ngFor="let component of components.controls; let i = index">
                 <ng-container [formGroupName]="i">
                     <div class="d-flex align-items-center">
-                        <button *ngIf="component.value.isDeletable" class="btn btn-danger me-2" (click)="delete(i)">
+                        <button *ngIf="!component.value.isPristine" class="btn btn-danger me-2" (click)="delete(i)">
                             Delete
                         </button>
                         <input
@@ -48,7 +48,7 @@
                         </div>
 
                         <button
-                            *ngIf="!component.value.isDeletable"
+                            *ngIf="component.value.isPristine"
                             class="btn btn-primary"
                             (click)="duplicate(component)"
                         >
