@@ -1,0 +1,38 @@
+.premade-component {
+    position: relative;
+    border-radius: 10px;
+    border: 2px solid rgba(55, 55, 156, 0.25);
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    + .premade-component {
+        margin-top: 15px;
+    }
+
+    &--pristine {
+        border-color: rgba(255, 255, 0, 0.25);
+    }
+
+    &:hover {
+        .premade-component__index-controls {
+            display: flex;
+        }
+    }
+
+    &__preview-img,
+    .form-check-input {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    &__index-controls {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        right: 100%;
+    }
+}

@@ -4,8 +4,27 @@
 
     <form [formGroup]="availableComponentsForm">
         <div class="row">
-            <div class="col-12" formArrayName="components" *ngFor="let component of components.controls; let i = index">
+            <div
+                class="col-12 premade-component"
+                formArrayName="components"
+                [ngClass]="{ 'premade-component--pristine': component.value.isPristine }"
+                *ngFor="let component of components.controls; let i = index"
+            >
                 <ng-container [formGroupName]="i">
+                    <div class="premade-component__index-controls">
+                        <button class="btn btn-primary mb-1 me-2" [disabled]="i === 0" (click)="moveComponentUp(i)">
+                            ++
+                        </button>
+
+                        <button
+                            class="btn btn-primary"
+                            [disabled]="i + 1 === components.length"
+                            (click)="moveComponentDown(i)"
+                        >
+                            --
+                        </button>
+                    </div>
+
                     <div class="d-flex align-items-center">
                         <button *ngIf="!component.value.isPristine" class="btn btn-danger me-2" (click)="delete(i)">
                             Delete
@@ -21,17 +40,11 @@
                             [for]="component.value.contains.imageURLs.preview + '-' + i"
                         >
                             <img
-                                class="img-fluid"
+                                class="premade-component__preview-img img-fluid"
                                 [src]="'../../../../' + component.value.contains.imageURLs.preview"
                                 alt=""
                             />
                         </label>
-                    </div>
-
-                    <div class="d-flex align-items-center">
-                        <button class="btn btn-primary me-3" (click)="moveComponentUp(i)">++</button>
-                        <button class="btn btn-primary me-3" (click)="moveComponentDown(i)">--</button>
-                        <div>index: {{ component.value.index }}</div>
                     </div>
 
                     <div *ngIf="component.get('checked').value">
@@ -49,7 +62,7 @@
 
                         <button
                             *ngIf="component.value.isPristine"
-                            class="btn btn-primary"
+                            class="btn btn-primary mt-2"
                             (click)="duplicate(component)"
                         >
                             duplicate
@@ -59,7 +72,9 @@
             </div>
         </div>
 
-        <button type="button" (click)="onSend()">Control values</button>
-        <button type="button" (click)="onGenerateHTML()">Generate HTML</button>
+        <div class="mt-2">
+            <button type="button" (click)="onSend()">Control values</button>
+            <button type="button" (click)="onGenerateHTML()">Generate HTML</button>
+        </div>
     </form>
 </div>
