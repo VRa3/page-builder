@@ -28,6 +28,12 @@
                         </label>
                     </div>
 
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-primary me-3" (click)="moveComponentUp(i)">++</button>
+                        <button class="btn btn-primary me-3" (click)="moveComponentDown(i)">--</button>
+                        <div>index: {{ component.value.index }}</div>
+                    </div>
+
                     <div *ngIf="component.get('checked').value">
                         <h2>Inputs placeholder</h2>
 
@@ -41,7 +47,13 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-primary" (click)="duplicate(component)">duplicate</button>
+                        <button
+                            *ngIf="!component.value.isDeletable"
+                            class="btn btn-primary"
+                            (click)="duplicate(component)"
+                        >
+                            duplicate
+                        </button>
                     </div>
                 </ng-container>
             </div>

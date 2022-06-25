@@ -23,8 +23,8 @@ export class SelectionFormComponent implements OnInit, OnDestroy {
     constructor(private fb: FormBuilder, private builderService: BuilderService) {}
 
     ngOnInit(): void {
-        availablePremadeComponents.forEach((component) => {
-            this.components.push(this.createFormGroupForPremadeComponent(component, false));
+        availablePremadeComponents.forEach((component, i) => {
+            this.components.push(this.createFormGroupForPremadeComponent(component, false, i));
         });
 
         this.availableComponentsFormSub = this.availableComponentsForm.valueChanges.subscribe((form) => {
@@ -80,19 +80,50 @@ export class SelectionFormComponent implements OnInit, OnDestroy {
             (el) => el.componentName === component.value.contains.componentName
         );
 
-        this.components.push(this.createFormGroupForPremadeComponent(premadeComponentToAdd, true));
+        this.components.push(
+            this.createFormGroupForPremadeComponent(premadeComponentToAdd, true, this.components.controls.length)
+        );
     }
 
     delete(i: number) {
         this.components.removeAt(i);
     }
 
-    private createFormGroupForPremadeComponent(component: PremadeComponent, isDeletable: boolean): FormGroup {
+    moveComponentUp(i: number) {
+        this.components.at(i - 1).value.index = this.components.at(i - 1).value.index + 1;
+
+        const x = this.components.at(i);
+
+        this.components.removeAt(i);
+
+        x.value.index--;
+
+        this.components.insert(i - 1, x);
+    }
+
+    moveComponentDown(i: number) {
+        this.components.at(i + 1).value.index = this.components.at(i + 1).value.index - 1;
+
+        const x = this.components.at(i);
+
+        this.components.removeAt(i);
+
+        x.value.index++;
+
+        this.components.insert(i + 1, x);
+    }
+
+    private createFormGroupForPremadeComponent(
+        component: PremadeComponent,
+        isDeletable: boolean,
+        i: number
+    ): FormGroup {
         const obj = {
             contains: component,
             checked: false,
             inputs: this.fb.array([]),
             isDeletable,
+            index: i,
         };
 
         for (let input of component.inputs) {
